@@ -19,8 +19,8 @@ class YoloLoss(nn.Module):
         iou_b1 = intersection_over_union(predictions[..., 21:25], target[..., 21:25])
         iou_b2 = intersection_over_union(predictions[..., 26:30], target[..., 21:25])
         ious = torch.cat([iou_b1.unsqueeze(0), iou_b2.unsqueeze(0)], dim=0)
-        iou_maxes, bestbox = torch.max(ious, dim=0)
-        exists_box = target[..., 20].unsqueeze(3)  # Iobj_i
+        iou_maxes, bestbox = torch.max(ious, dim=0)  # bestbox를 이용해서 2개의 bbox중 gt와 iou가 높은 것을 선택한다.
+        exists_box = target[..., 20].unsqueeze(3)  # Iobj_i -> 객체 존재 1, 객체 존재 안하면 0
 
         # For BOX COORDINATES
         box_predictions = exists_box * (
@@ -33,11 +33,11 @@ class YoloLoss(nn.Module):
         box_targets = exists_box * target[..., 21:25]
 
         box_predictions[..., 2:4] = torch.sign(box_predictions[..., 2:4]) * torch.sqrt(
-            torch.abs(box_predictions[..., 2:4] + 1e-6)
+            torch.abs(box_predictions[..., 2:4] + 1e-6)  # 예측한 h,w 루트 연산 in paper
         )
 
         # (N, S, S, 25)
-        box_targets[..., 2:4] = torch.sqrt(box_targets[..., 2:4])
+        box_targets[..., 2:4] = torch.sqrt(box_targets[..., 2:4])  #gt의 h,w 루트 연산 in paper
 
         # flatten 전: (N, S, S, 4) -> flatten 후: (N*S*S, 4)
         box_loss = self.mse(
@@ -53,7 +53,7 @@ class YoloLoss(nn.Module):
         # (N*S*S)
         object_loss = self.mse(
             torch.flatten(exists_box * pred_box),
-            torch.flatten(exists_box * target[..., 20:21])
+            torch.flatten(exists_box * target[..., 20:21] * iou_maxes)  # confidence score를 이용해 loss 계산하기 위해 iou_maxes를 곱해준다.
         )
 
         # FOR NO OBJECT LOSS

@@ -36,16 +36,18 @@ IMG_DIR = "data/images"
 LABEL_DIR = "data/labels"
 
 
-class Compose:
+class Compose(object):
     def __init__(self, transforms):
         self.transforms = transforms
 
     def __call__(self, img, bboxes):
         for t in self.transforms:
             img, bboxes = t(img), bboxes
+        
+        return img, bboxes
 
 
-transform = Compose([transforms.Resize((448, 448)), transforms.ToTensor()])
+transform = Compose([transforms.Resize((448, 448)), transforms.ToTensor(),])
 
 
 def train_fn(train_loader, model, optimizer, loss_fn):
@@ -78,15 +80,15 @@ def main():
     
 
     train_dataset = VOCDataset(
-        "data/train.csv",
-        transforms=transform,
+        "data/100examples.csv",
+        transform=transform,
         img_dir=IMG_DIR,
         label_dir=LABEL_DIR
     )
 
     test_dataset = VOCDataset(
         "data/test.csv",
-        transforms=transform,
+        transform=transform,
         img_dir=IMG_DIR,
         label_dir=LABEL_DIR
     )
@@ -118,7 +120,7 @@ def main():
             pred_boxes, target_boxes, iou_threshold=0.5, box_format="midpoint"
         )
 
-        print(f"Train mAP: {mean_avg_prec}")
+        print(f"Train mAP in {epoch}: {mean_avg_prec}")
 
         train_fn(train_loader, model, optimizer, loss_fn)
 
