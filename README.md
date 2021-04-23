@@ -1,7 +1,7 @@
 # YOLO v1
 
 ## 소개
-You Only Look Once: Unified, Real-Time Object Detection(https://arxiv.org/abs/1506.02640)
+You Only Look Once(YOLO v1): Unified, Real-Time Object Detection 논문 리뷰 및 코드 공부 (https://arxiv.org/abs/1506.02640)
 
 논문 리뷰: https://velog.io/@skhim520/YOLO-v1-%EB%85%BC%EB%AC%B8-%EB%A6%AC%EB%B7%B0-%EB%B0%8F-%EC%BD%94%EB%93%9C-%EA%B5%AC%ED%98%84  
 참고한 코드(baseline):https://github.com/aladdinpersson/Machine-Learning-Collection/tree/master/ML/Pytorch/object_detection/YOLO  
