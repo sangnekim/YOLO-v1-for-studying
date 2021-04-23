@@ -50,8 +50,8 @@ LABEL_DIR = "data/labels"
 ```
 
 ## 논문 구현과 다른 점
-YOLO v1 논문을 이해하기 위한 코드 구현으로 computation cost등의 문제로 논문의 세세한 부분까지는 구현하지 못 했습니다.  
-다른 점은 다음과 같습니다. 또한 시각화에 신경쓰지 못 했습니다.
+YOLO v1 논문을 이해하기 위한 코드 구현으로 computation cost등의 문제로 논문의 세세한 부분까지는 구현하지 못 했습니다. 또한 시각화에 신경쓰지 못 했습니다.  
+다른 점은 다음과 같습니다.
 1. pre-train network를 사용하지 않았다.
 2. hyperparmeter가 다르다.(learning rate, batch size, etc.)
 3. learning rate schedule을 사용하지 않았다.
